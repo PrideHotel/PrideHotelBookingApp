@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "194498035683",
+    "project_id": "pridehotelbookingapp",
+    "storage_bucket": "pridehotelbookingapp.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:194498035683:android:48ba0b3615b960dac5ead6",
+        "android_client_info": {
+          "package_name": "com.pridehotel.booking"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDN2O6WlfNxJsDCGkZPhCCshtQgQ2zqEsE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
