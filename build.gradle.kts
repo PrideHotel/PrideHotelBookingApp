@@ -2,8 +2,11 @@
 
 plugins {
     id("com.android.application") version "8.9.1" apply false
-    id("org.jetbrains.kotlin.android") version "1.9.10" apply false
+    id("org.jetbrains.kotlin.android") version "1.9.21" apply false
     id("com.google.gms.google-services") version "4.4.0" apply false
+
+    // ← add Hilt here
+    id("com.google.dagger.hilt.android")   version "2.48"   apply false
 }
 
 buildscript {
@@ -13,8 +16,9 @@ buildscript {
     }
     dependencies {
         classpath("com.android.tools.build:gradle:8.9.1")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.10")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.21")
         classpath("com.google.gms:google-services:4.4.0")
+        classpath ("com.google.dagger:hilt-android-gradle-plugin:2.48")
     }
 }
 
