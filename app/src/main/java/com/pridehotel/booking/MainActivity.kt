@@ -1,3 +1,4 @@
+// MainActivity.kt
 package com.pridehotel.booking
 
 import android.net.Uri
@@ -5,24 +6,36 @@ import android.os.Bundle
 import android.widget.VideoView
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Book
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.VolumeOff
+import androidx.compose.material.icons.filled.VolumeUp
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.*
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.pridehotel.booking.R
 import com.pridehotel.booking.ui.screens.HomeScreen
 import com.pridehotel.booking.ui.theme.PrideHotelTheme
 import com.pridehotel.booking.ui.viewmodels.HomeViewModel
@@ -40,28 +53,48 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun HeroVideo(modifier: Modifier = Modifier) {
+fun HeroVideo(
+    modifier: Modifier = Modifier
+) {
     val ctx = LocalContext.current
-    Box(modifier = modifier) {
-        // Static placeholder behind the VideoView
-        Image(
-            painter = painterResource(R.drawable.placeholder_hero),
-            contentDescription = null,
-            modifier = Modifier.matchParentSize(),
-            contentScale = ContentScale.Crop
-        )
-        AndroidView(factory = {
-            VideoView(it).apply {
-                setVideoURI(
-                    Uri.parse("android.resource://${it.packageName}/${R.raw.placeholder_video}")
-                )
-                setOnPreparedListener { mp ->
-                    mp.isLooping = true
-                    start()
+    var isAudioOn by remember { mutableStateOf(true) }
+    var mediaPlayer by remember { mutableStateOf<android.media.MediaPlayer?>(null) }
+
+    Box(
+        modifier = modifier,
+        contentAlignment = Alignment.TopEnd
+    ) {
+        AndroidView(
+            factory = {
+                VideoView(it).apply {
+                    setVideoURI(Uri.parse("android.resource://${it.packageName}/${R.raw.placeholder_video}"))
+                    setOnPreparedListener { mp ->
+                        mediaPlayer = mp
+                        mp.isLooping = true
+                        mp.setVolume(1f, 1f)
+                        start()
+                    }
+                    setOnErrorListener { _, _, _ -> true }
                 }
-                setOnErrorListener { _, _, _ -> true }
-            }
-        }, modifier = Modifier.matchParentSize())
+            },
+            modifier = Modifier.matchParentSize()
+        )
+        IconButton(
+            onClick = {
+                isAudioOn = !isAudioOn
+                mediaPlayer?.setVolume(if (isAudioOn) 1f else 0f, if (isAudioOn) 1f else 0f)
+            },
+            modifier = Modifier
+                .padding(8.dp)
+                .size(32.dp)
+                .background(Color.Black.copy(alpha = 0.5f), shape = MaterialTheme.shapes.small)
+        ) {
+            Icon(
+                imageVector = if (isAudioOn) Icons.Default.VolumeUp else Icons.Default.VolumeOff,
+                contentDescription = null,
+                tint = Color.White
+            )
+        }
     }
 }
 
@@ -71,16 +104,18 @@ fun MainScreen() {
     Scaffold(
         bottomBar = {
             NavigationBar {
-                listOf(
-                    "home" to Icons.Filled.Home,
-                    "search" to Icons.Filled.Search,
-                    "bookings" to Icons.Filled.Book,
-                    "profile" to Icons.Filled.AccountCircle
-                ).forEach { (route, icon) ->
+                val items = listOf(
+                    "home" to Icons.Default.Home,
+                    "search" to Icons.Default.Search,
+                    "bookings" to Icons.Default.Book,
+                    "profile" to Icons.Default.AccountCircle
+                )
+                val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
+                items.forEach { (route, icon) ->
                     NavigationBarItem(
-                        icon = { Icon(icon, contentDescription = route.capitalize()) },
-                        label = { Text(route.capitalize()) },
-                        selected = currentRoute(navController) == route,
+                        icon = { Icon(icon, contentDescription = null) },
+                        label = { Text(route.replaceFirstChar { it.uppercase() }) },
+                        selected = currentRoute == route,
                         onClick = { navController.navigate(route) }
                     )
                 }
@@ -94,24 +129,18 @@ fun MainScreen() {
                     .height(200.dp)
             )
             NavHost(
-                navController    = navController,
+                navController = navController,
                 startDestination = "home",
-                modifier         = Modifier.weight(1f)
+                modifier = Modifier.weight(1f)
             ) {
                 composable("home") {
                     val vm: HomeViewModel = hiltViewModel()
-                    HomeScreen(vm.hotels) { /* TODO: Details */ }
+                    HomeScreen(vm.hotels) { /* Details */ }
                 }
-                composable("search")   { /* TODO: Search screen */ }
-                composable("bookings") { /* TODO: Bookings screen */ }
-                composable("profile")  { /* TODO: Profile screen */ }
+                composable("search") { /* Search */ }
+                composable("bookings") { /* Bookings */ }
+                composable("profile") { /* Profile */ }
             }
         }
     }
-}
-
-@Composable
-fun currentRoute(navController: NavHostController): String? {
-    val backStack by navController.currentBackStackEntryAsState()
-    return backStack?.destination?.route
 }
