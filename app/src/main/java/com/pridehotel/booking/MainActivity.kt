@@ -1,7 +1,6 @@
 // MainActivity.kt
 package com.pridehotel.booking
 
-import android.net.Uri
 import android.os.Bundle
 import android.widget.VideoView
 import androidx.activity.ComponentActivity
@@ -9,12 +8,12 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.VolumeOff
+import androidx.compose.material.icons.automirrored.filled.VolumeUp
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Book
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.VolumeOff
-import androidx.compose.material.icons.filled.VolumeUp
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -22,7 +21,6 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -39,6 +37,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.pridehotel.booking.ui.screens.HomeScreen
 import com.pridehotel.booking.ui.theme.PrideHotelTheme
 import com.pridehotel.booking.ui.viewmodels.HomeViewModel
+import androidx.core.net.toUri
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -67,7 +66,7 @@ fun HeroVideo(
         AndroidView(
             factory = {
                 VideoView(it).apply {
-                    setVideoURI(Uri.parse("android.resource://${it.packageName}/${R.raw.placeholder_video}"))
+                    setVideoURI("android.resource://${it.packageName}/${R.raw.placeholder_video}".toUri())
                     setOnPreparedListener { mp ->
                         mediaPlayer = mp
                         mp.isLooping = true
@@ -90,7 +89,7 @@ fun HeroVideo(
                 .background(Color.Black.copy(alpha = 0.5f), shape = MaterialTheme.shapes.small)
         ) {
             Icon(
-                imageVector = if (isAudioOn) Icons.Default.VolumeUp else Icons.Default.VolumeOff,
+                imageVector = if (isAudioOn) Icons.AutoMirrored. Filled. VolumeUp else Icons.AutoMirrored. Filled. VolumeOff,
                 contentDescription = null,
                 tint = Color.White
             )
