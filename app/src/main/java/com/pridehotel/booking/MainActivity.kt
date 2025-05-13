@@ -1,4 +1,3 @@
-// MainActivity.kt
 package com.pridehotel.booking
 
 import android.os.Bundle
@@ -28,6 +27,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.net.toUri
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -37,7 +37,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.pridehotel.booking.ui.screens.HomeScreen
 import com.pridehotel.booking.ui.theme.PrideHotelTheme
 import com.pridehotel.booking.ui.viewmodels.HomeViewModel
-import androidx.core.net.toUri
+import com.pridehotel.booking.R
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -89,7 +89,7 @@ fun HeroVideo(
                 .background(Color.Black.copy(alpha = 0.5f), shape = MaterialTheme.shapes.small)
         ) {
             Icon(
-                imageVector = if (isAudioOn) Icons.AutoMirrored. Filled. VolumeUp else Icons.AutoMirrored. Filled. VolumeOff,
+                imageVector = if (isAudioOn) Icons.AutoMirrored.Filled.VolumeUp else Icons.AutoMirrored.Filled.VolumeOff,
                 contentDescription = null,
                 tint = Color.White
             )
@@ -125,7 +125,7 @@ fun MainScreen() {
             HeroVideo(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(200.dp)
+                    .height(240.dp)
             )
             NavHost(
                 navController = navController,
@@ -136,9 +136,9 @@ fun MainScreen() {
                     val vm: HomeViewModel = hiltViewModel()
                     HomeScreen(vm.hotels) { /* Details */ }
                 }
-                composable("search") { /* Search */ }
-                composable("bookings") { /* Bookings */ }
-                composable("profile") { /* Profile */ }
+                composable("search") {}
+                composable("bookings") {}
+                composable("profile") {}
             }
         }
     }
