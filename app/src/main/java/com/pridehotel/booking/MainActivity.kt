@@ -38,6 +38,8 @@ import com.pridehotel.booking.ui.screens.HomeScreen
 import com.pridehotel.booking.ui.theme.PrideHotelTheme
 import com.pridehotel.booking.ui.viewmodels.HomeViewModel
 import com.pridehotel.booking.R
+import com.pridehotel.booking.ui.screens.ChatScreen
+import com.pridehotel.booking.ui.viewmodels.ChatViewModel
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -135,6 +137,10 @@ fun MainScreen() {
                 composable("home") {
                     val vm: HomeViewModel = hiltViewModel()
                     HomeScreen(vm.hotels) { /* Details */ }
+                }
+                composable("chat") {
+                    val vm: ChatViewModel = hiltViewModel()
+                    ChatScreen(vm)
                 }
                 composable("search") {}
                 composable("bookings") {}
