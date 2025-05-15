@@ -1,8 +1,9 @@
 package com.pridehotel.booking.data.repository
 
 import com.pridehotel.booking.data.models.Hotel
+import javax.inject.Inject // Added for Hilt
 
-class HotelRepository {
+class HotelRepository @Inject constructor() { // Added @Inject constructor
     fun getHotels(): List<Hotel> {
         return listOf(
             Hotel("5286", "Pride Plaza Ahmedabad", "Ahmedabad", "https://assets.simplotel.com/simplotel/image/upload/pride-plaza-ahmedabad/1_(1)_fd98666c"),
